@@ -1,35 +1,39 @@
 import mongoose from "mongoose";
+
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
+    name: { type: String, required: true },
+    
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true
+     },
+    
+    password: { 
+      type: String, 
+      required: true, 
+      minlength: 6 
     },
-
-    email: {
-      type: String,
-      required: true,
-      unique: true,
+    
+    personaType: { 
+      type: String, 
+      default: null 
     },
-
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-    },
-
-    personaType: {
-      type: String,
-      default: null, 
-    },
-
-    quizScores: {
+    
+    quizScores: { 
       type: Object,
-      default: {},
+       default: {} 
+      },
+  
+    carbonFootprint: {
+       type: Number, 
+       default: null 
     },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("User", userSchema);
+
 

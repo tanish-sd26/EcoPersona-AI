@@ -1,9 +1,10 @@
 import express from "express";
-import { signup, login } from "../controllers/authControllers.js";
+import { generatePersona } from "../controllers/personaControllers.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
+// POST: Generate persona
+router.post("/:userId", protect, generatePersona);
 
 export default router;

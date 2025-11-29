@@ -1,11 +1,22 @@
+import User from "../model/user.js";
+
 export const generatePersona = async (req, res) => {
   try {
+    const { userId } = req.params;
     const { answers } = req.body;
+
+    console.log("UserId:", userId);
+    console.log("Answers:", answers);
 
     if (!answers || answers.length < 5) {
       return res.status(400).json({
         message: "Not enough data to generate persona",
       });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     let score = {
@@ -23,7 +34,6 @@ export const generatePersona = async (req, res) => {
     });
 
     let personaType = "Balanced Persona";
-
     const maxScore = Math.max(
       score.calm,
       score.energetic,
@@ -35,6 +45,10 @@ export const generatePersona = async (req, res) => {
     if (maxScore === score.energetic) personaType = "Energetic Persona";
     if (maxScore === score.analytical) personaType = "Analytical Persona";
     if (maxScore === score.emotional) personaType = "Emotional Persona";
+
+    user.personaType = personaType;
+    user.quizScores = score;
+    await user.save();
 
     res.status(200).json({
       message: "Persona generated",
