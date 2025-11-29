@@ -13,5 +13,14 @@ export const calculateCarbonFootprint = (data) => {
   const total =
     electricityImpact + transportImpact + dietImpact + waterImpact + wasteImpact;
 
-
+    return {
+    total: parseFloat(total.toFixed(2)), 
+    breakdown: {
+      electricity: parseFloat(electricityImpact.toFixed(2)),
+      transport: parseFloat(transportImpact.toFixed(2)),
+      diet: parseFloat(dietImpact.toFixed(2)),
+      water: parseFloat(waterImpact.toFixed(2)),
+      waste: parseFloat(wasteImpact.toFixed(2)),
+    },
+  };
 };
