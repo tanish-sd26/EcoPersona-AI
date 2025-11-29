@@ -10,5 +10,8 @@ export const calculateCarbonFootprint = (data) => {
   const waterImpact = water * 0.0003;
   const wasteImpact = waste * 0.0002;
 
+  const total =
+    electricityImpact + transportImpact + dietImpact + waterImpact + wasteImpact;
+
 
 };
