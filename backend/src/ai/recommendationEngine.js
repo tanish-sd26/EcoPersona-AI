@@ -23,7 +23,13 @@ export const generateRecommendations = (persona, score) => {
     );
   }
 
-  
+  if (score > 60) {
+    recommendations.push("Try composting kitchen waste.");
+  }
+
+  if (score > 80) {
+    recommendations.push("Become a sustainability advocate in your community.");
+  }
 
   return recommendations;
 };
