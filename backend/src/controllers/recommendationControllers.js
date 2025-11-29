@@ -10,6 +10,15 @@ export const getRecommendations = async (req, res) => {
       });
     }
 
- 
+     const recs = generateRecommendations(persona, score);
+
+    res.status(200).json({
+      message: "Recommendations generated successfully!",
+      recommendations: recs,
+    });
+  } catch (error) {
+    console.log("Recommendation error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
