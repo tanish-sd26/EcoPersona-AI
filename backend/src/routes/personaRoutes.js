@@ -1,9 +1,7 @@
 import express from "express";
+import {generatePersona} from "../controllers/personaControllers.js";
 const router = express.Router();
 
-// Temporary test route
-router.get("/", (req, res) => {
-  res.json({ message: "persona route working" });
-});
+router.post("/generate", generatePersona);
 
 export default router;
