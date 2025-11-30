@@ -7,9 +7,10 @@ export default function Login() {
   // Login function
   function loginUser() {
     if (email && password) {
-      
+     
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("username", email); 
+      alert("Login successful!");
       window.location.href = "/dashboard"; 
     } else {
       alert("Please enter email and password.");
@@ -56,3 +57,4 @@ export default function Login() {
     </div>
   );
 }
+
