@@ -4,7 +4,7 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/generate", protect, getRecommendations);
-// fallback: router.post("/generate", getRecommendations);
+router.post("/", protect, getRecommendations);
+router.post("/user", getRecommendations);
 
 export default router;

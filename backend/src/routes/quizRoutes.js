@@ -4,5 +4,5 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/submit", protect, submitQuiz); 
+router.post("/", protect, submitQuiz); 
 export default router;

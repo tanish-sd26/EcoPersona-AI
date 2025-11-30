@@ -1,29 +1,57 @@
 export const generateRecommendations = (persona, score) => {
-  const recs = [];
+  const recommendations = [];
 
-  if (!persona) {
-    recs.push("Start with basic recycling and energy saving tips.");
+  switch (persona) {
+    case "Calm Persona":
+      recommendations.push(
+        "Try meditation for 10 minutes daily",
+        "Practice mindful breathing",
+        "Spend more time in nature"
+      );
+      break;
+
+    case "Energetic Persona":
+      recommendations.push(
+        "Join a local eco-volunteering group",
+        "Go for cycling or walking instead of driving",
+        "Try eco-friendly workouts like plogging"
+      );
+      break;
+
+    case "Analytical Persona":
+      recommendations.push(
+        "Track your energy consumption weekly",
+        "Analyze your carbon footprint and set reduction goals",
+        "Research sustainable products before buying"
+      );
+      break;
+
+    case "Emotional Persona":
+      recommendations.push(
+        "Share eco-friendly tips with friends/family",
+        "Adopt plants or small pets to feel connected to nature",
+        "Journal your sustainability journey"
+      );
+      break;
+
+    default:
+
+      recommendations.push(
+        "Use reusable bags and bottles",
+        "Save electricity and water",
+        "Recycle waste properly",
+        "Take public transport whenever possible"
+      );
+      break;
   }
 
-  if (persona.includes("Calm")) {
-    recs.push("Practice mindful consumption & reduce impulsive purchases.");
-    recs.push("Try low-energy lighting and smart thermostats.");
-  }
-  if (persona.includes("Energetic")) {
-    recs.push("Use bicycle or public transport for short trips.");
-    recs.push("Join a local cleanup or tree-planting drive.");
-  }
-  if (persona.includes("Analytical")) {
-    recs.push("Track your carbon footprint monthly and set goals.");
-    recs.push("Compare appliance energy ratings before purchase.");
-  }
-  if (persona.includes("Emotional")) {
-    recs.push("Volunteer in community sustainability programs.");
-    recs.push("Share sustainability tips with friends & family.");
+  if (score > 80) {
+    recommendations.push("You're doing great! Consider mentoring others in sustainability.");
+  } else if (score > 50) {
+    recommendations.push("Good progress! Try to implement more eco-friendly habits.");
+  } else {
+    recommendations.push("Start with small steps: reduce plastic and save water.");
   }
 
-  if (score >= 60) recs.push("Try composting kitchen waste.");
-  if (score >= 80) recs.push("Consider switching to renewable energy if possible.");
-
-  return [...new Set(recs)];
+  return recommendations;
 };
