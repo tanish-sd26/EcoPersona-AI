@@ -1,94 +1,86 @@
 import { useState } from "react";
+import questions from "../data/questions";
+
+console.log("Loaded Questions:", questions);
 
 export default function PersonaBuilder() {
-  const [answers, setAnswers] = useState({
-    transport: "",
-    energy: "",
-    recycling: "",
-    shopping: "",
-  });
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
 
-  const handleChange = (e) => {
-    setAnswers({ ...answers, [e.target.name]: e.target.value });
-  };
+  const current = questions[step];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted Persona:", answers);
+  function handleAnswer(value) {
+    setAnswers({ ...answers, [current.id]: value });
 
-    alert("Persona Saved! (Backend connect hone par API chalegi)");
-  };
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    }
+  }
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Build Your Eco Persona</h1>
+      <h1 className="text-3xl font-bold mb-4">Build Your Eco Persona</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        
-        <div>
-          <label className="block font-medium mb-1">1. Transport Choices</label>
-          <select
-            name="transport"
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="">Select</option>
-            <option value="car">Car</option>
-            <option value="public">Public Transport</option>
-            <option value="cycle">Cycle</option>
-          </select>
-        </div>
+      <p className="text-gray-600 mb-4">
+        Question {step + 1} of {questions.length}
+      </p>
 
-        <div>
-          <label className="block font-medium mb-1">2. Home Energy Usage</label>
-          <select
-            name="energy"
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="">Select</option>
-            <option value="solar">Solar Power</option>
-            <option value="electricity">Electricity</option>
-            <option value="mixed">Mixed</option>
-          </select>
-        </div>
+      <div className="p-4 border rounded-xl shadow-md bg-white">
+        <h2 className="text-xl font-semibold mb-4">{current.question}</h2>
 
-        <div>
-          <label className="block font-medium mb-1">3. Recycling Habits</label>
-          <select
-            name="recycling"
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="">Select</option>
-            <option value="regular">I recycle regularly</option>
-            <option value="sometimes">Sometimes</option>
-            <option value="never">Never</option>
-          </select>
-        </div>
+        {/* Multiple Choice */}
+        {current.type === "multiple" &&
+          current.options.map((opt) => (
+            <button
+              key={opt}
+              onClick={() => handleAnswer(opt)}
+              className="block w-full py-2 px-3 my-2 border rounded-lg hover:bg-green-100"
+            >
+              {opt}
+            </button>
+          ))}
 
-        <div>
-          <label className="block font-medium mb-1">4. Shopping Preferences</label>
-          <select
-            name="shopping"
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="">Select</option>
-            <option value="eco">Eco-friendly products</option>
-            <option value="normal">Regular products</option>
-            <option value="mixed">Mix of both</option>
-          </select>
-        </div>
+        {/* Yes/No */}
+        {current.type === "yesno" && (
+          <div className="flex gap-4">
+            <button
+              onClick={() => handleAnswer("Yes")}
+              className="w-1/2 py-2 px-3 border rounded-lg hover:bg-green-100"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => handleAnswer("No")}
+              className="w-1/2 py-2 px-3 border rounded-lg hover:bg-red-100"
+            >
+              No
+            </button>
+          </div>
+        )}
 
+        {/* Slider */}
+        {current.type === "slider" && (
+          <input
+            type="range"
+            min={current.min}
+            max={current.max}
+            onChange={(e) => handleAnswer(e.target.value)}
+            className="w-full"
+          />
+        )}
+      </div>
+
+      {/* Submit button only on last step */}
+      {step === questions.length - 1 && (
         <button
-          type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded"
+          onClick={() => console.log("Final Answers:", answers)}
+          className="mt-4 w-full py-3 bg-green-600 text-white font-semibold rounded-lg"
         >
-          Save Persona
+          Generate Persona
         </button>
-      </form>
+      )}
     </div>
   );
 }
+
 
