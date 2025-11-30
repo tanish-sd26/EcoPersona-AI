@@ -1,62 +1,36 @@
 import User from "../model/user.js";
+import Persona from "../model/persona.js";
+import { generatePersonaFromAnswers } from "../ai/personaEngine.js";
 
 export const generatePersona = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = (req.user && req.user._id) || req.params.userId || req.body.userId;
     const { answers } = req.body;
 
-    console.log("UserId:", userId);
-    console.log("Answers:", answers);
-
-    if (!answers || answers.length < 5) {
-      return res.status(400).json({
-        message: "Not enough data to generate persona",
-      });
+    if (!userId) return res.status(400).json({ message: "Missing userId" });
+    if (!answers || !Array.isArray(answers) || answers.length < 1) {
+      return res.status(400).json({ message: "Answers required to generate persona" });
     }
 
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    let score = {
-      calm: 0,
-      energetic: 0,
-      analytical: 0,
-      emotional: 0,
-    };
-
-    answers.forEach((a) => {
-      if (a.includes("calm") || a.includes("peace")) score.calm++;
-      if (a.includes("energy") || a.includes("active")) score.energetic++;
-      if (a.includes("logic") || a.includes("think")) score.analytical++;
-      if (a.includes("feel") || a.includes("heart")) score.emotional++;
-    });
-
-    let personaType = "Balanced Persona";
-    const maxScore = Math.max(
-      score.calm,
-      score.energetic,
-      score.analytical,
-      score.emotional
-    );
-
-    if (maxScore === score.calm) personaType = "Calm Persona";
-    if (maxScore === score.energetic) personaType = "Energetic Persona";
-    if (maxScore === score.analytical) personaType = "Analytical Persona";
-    if (maxScore === score.emotional) personaType = "Emotional Persona";
+    const { personaType, scores } = generatePersonaFromAnswers(answers);
 
     user.personaType = personaType;
-    user.quizScores = score;
+    user.quizScores = { ...scores };
     await user.save();
 
-    res.status(200).json({
-      message: "Persona generated",
-      personaType,
-      scores: score,
-    });
-  } catch (error) {
-    console.error(error);
+    // Save Persona document (optional)
+    await Persona.findOneAndUpdate(
+      { user: userId },
+      { personaType, scores },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({ message: "Persona generated", personaType, scores });
+  } catch (err) {
+    console.error("Persona generate error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
