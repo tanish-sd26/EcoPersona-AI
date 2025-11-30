@@ -1,7 +1,7 @@
 import { calculateCarbonFootprint } from "../ai/carbonFormula.js";
 export const estimateCarbon = (req, res) => {
   try {
-    const data = req.body; // electricity, transport, diet, water, waste
+    const data = req.body;
     const result = calculateCarbonFootprint(data);
     res.status(200).json({
       success: true,

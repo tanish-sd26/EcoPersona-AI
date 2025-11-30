@@ -4,7 +4,7 @@ import User from "../model/user.js";
 
 export const getRecommendations = async (req, res) => {
   try {
-    // Accept persona & score in body OR derive from user
+  
     const userId = (req.user && req.user._id) || req.body.userId;
     let { persona, score } = req.body;
 
@@ -19,7 +19,7 @@ export const getRecommendations = async (req, res) => {
     const recs = generateRecommendations(persona, score);
 
     if (userId) {
-      // save for user
+     
       await Recommendation.findOneAndUpdate(
         { user: userId },
         { items: recs },

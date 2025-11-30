@@ -21,7 +21,6 @@ export const generatePersona = async (req, res) => {
     user.quizScores = { ...scores };
     await user.save();
 
-    // Save Persona document (optional)
     await Persona.findOneAndUpdate(
       { user: userId },
       { personaType, scores },

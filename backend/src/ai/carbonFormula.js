@@ -1,6 +1,4 @@
-// backend/src/ai/carbonFormula.js
-
-export const calculateCarbonFootprint = (data) => {
+ export const calculateCarbonFootprint = (data) => {
   const { electricity, transport, diet, water, waste } = data;
 
   // Sample weightages (tonnes CO2e per year)
