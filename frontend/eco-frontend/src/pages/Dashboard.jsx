@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
-import { mockApi } from "../utils/mockApi";
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
+  const [username, setUsername] = useState("Guest"); // default
 
   useEffect(() => {
-    mockApi({
-      name: "Anshika",
-      carbonScore: 42,
-      persona: "Eco Warrior"
-    }).then((res) => setUser(res));
+
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "/login";
+    }
+
+    // username get karo
+    const name = localStorage.getItem("username");
+    if (name) setUsername(name);
   }, []);
 
-  if (!user) return <p>Loading...</p>;
-
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">Welcome, {user.name}</h1>
-      <p className="mt-4 text-lg">Your Carbon Score: {user.carbonScore}</p>
-      <p className="text-lg">Persona: {user.persona}</p>
+    <div className="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+      <p className="text-gray-600">
+        Welcome, {username}      
+      </p>
     </div>
   );
 }
+
+
